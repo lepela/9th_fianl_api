@@ -1,39 +1,47 @@
 package shop.javaman.api.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import shop.javaman.api.entity.enums.Provider;
 
+@Table(
+  uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"provider", "providerId"})
+  }
+)
 @Entity
 @Getter
 @Setter
-@ToString
-public class SocialAccount {
+public class Social {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 기본 키
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Provider provider; // 소셜 제공자 (Enum)
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member; // 연관된 회원
+  @Column(nullable = false)
+  private String providerId; // 소셜 제공자 고유 ID
 
-    @Column(nullable = false)
-    private String provider; // 소셜 제공자 (Google, Facebook 등)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id", nullable = false)
+  private Member member;
 
-    @Column(nullable = false)
-    private String providerId; // 소셜 제공자 ID
+  private String accessToken; // 소셜 인증 토큰 (옵션)
+  private LocalDateTime linkedAt; // 연결 시간
 
-    private String accessToken; // 소셜 인증 토큰 (필요 시)
+  // Map 변환
+  public Map<String, Object> toMap() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("provider", provider.name());
+    map.put("providerId", providerId);
+    return map;
+  }
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime linkedAt; // 소셜 계정 연결 시간
-
-    @PrePersist
-    public void prePersist() {
-        this.linkedAt = LocalDateTime.now();
-    }
 }

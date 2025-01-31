@@ -8,16 +8,9 @@ spring:
     - oauth
     - dbconn
     - s3
+    - security
   application:
     name: api
-  # datasource:
-  #   driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-  #   url: jdbc:log4jdbc:mariadb://np.javaman.shop:3306/security
-  #   # driver-class-name: org.mariadb.jdbc.Driver
-  #   # url: jdbc:mariadb://np.javaman.shop:3306/guestbook
-  #   username: sample
-  #   password: 1234
-
 
   jpa:
     hibernate:
@@ -40,16 +33,9 @@ spring:
       additional-exclude: static/**
     livereload:
       enabled: true
-  # thymeleaf:
-  #   cache: false
-  #   prefix: classpath:/templates/
-  #   suffix: .html
-  #   encoding: UTF-8
-  #   mode: html
-  
-  # security:
-  #   user:
-  #     name: user1
-  #     password: $2a$10$ZoY0NyBPXhblfzY210wrJePCBfGZH/baDYJNnA1MZN9GjwwGcbJki #1234
-  #     roles:
-  #     - USER
+      
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.security.oauth2: INFO # 디버그 레벨을 낮춤

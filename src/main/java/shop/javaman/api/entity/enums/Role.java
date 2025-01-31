@@ -1,4 +1,4 @@
-package shop.javaman.api.entity;
+package shop.javaman.api.entity.enums;
 
 public enum Role {
   USER, // 일반 사용자
